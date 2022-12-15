@@ -25,7 +25,7 @@ export class PodrobnostiIzdelkaComponent implements OnInit {
 
   getLocation() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position: Position) => {
+      navigator.geolocation.getCurrentPosition((position: any) => {
         if (position) {
           console.log("Latitude: " + position.coords.latitude +
             "Longitude: " + position.coords.longitude);
