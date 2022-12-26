@@ -2,62 +2,90 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 import {Uporabnik} from '../models/uporabnik';
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 
-import { catchError } from 'rxjs/operators';
-import { Izdelek } from '../models/izdelek';
-import { Cena } from '../models/cena';
-import { environment } from '../../../environments/environment';
+import {catchError} from 'rxjs/operators';
+import {Izdelek} from '../models/izdelek';
+import {Cena} from '../models/cena';
+import {environment} from '../../../environments/environment';
+import {Kosarica} from "../models/kosarica";
 
 @Injectable()
 export class Service {
-    uporabnik : Uporabnik = new Uporabnik()
+    uporabnik: Uporabnik = new Uporabnik()
 
     private headers = new HttpHeaders({'Content-Type': 'application/json'});
     private izdelkiApiUrl = environment.izdelkiApiUrl;
     private priljubljeniIzdelkiApiUrl = environment.priljubljeniIzdelkiApiUrl;
+    private kosaricaApiUrl = environment.kosaricaApiUrl;
 
     constructor(private http: HttpClient) {
     }
 
     getIzdelki(): Observable<Izdelek[]> {
-        return this.http.get<Izdelek[]>(this.izdelkiApiUrl+'izdelki')
-                        .pipe(catchError(this.handleError));
+        return this.http.get<Izdelek[]>(this.izdelkiApiUrl + 'izdelki')
+            .pipe(catchError(this.handleError));
     }
+
     getIzdelek(id: number): Observable<Izdelek> {
         const url = `${this.izdelkiApiUrl}izdelki/${id}`;
         return this.http.get<Izdelek>(url)
-                        .pipe(catchError(this.handleError));
+            .pipe(catchError(this.handleError));
     }
+
     getCeneIzdelka(id: number): Observable<Cena[]> {
         const url = `${this.izdelkiApiUrl}cene/izdelek/${id}`;
         return this.http.get<Cena[]>(url)
-                        .pipe(catchError(this.handleError));
+            .pipe(catchError(this.handleError));
     }
+
     getNajblizjeTrgovine(lat: number, lng: number): Observable<Cena[]> {
         const url = `${this.izdelkiApiUrl}trgovine/najblizja/${lat}/${lng}`;
         return this.http.get<Cena[]>(url)
-                        .pipe(catchError(this.handleError));
+            .pipe(catchError(this.handleError));
     }
-    dodajMedPriljubljene(izdelek: Izdelek): Observable<any>{
+
+    dodajMedPriljubljene(izdelek: Izdelek): Observable<any> {
         this.getUporabnik();
-        var object= {
-            "uporabnik":this.uporabnik,
-            "izdelek":izdelek
+        var object = {
+            "uporabnik": this.uporabnik,
+            "izdelek": izdelek
         }
         const url = `${this.priljubljeniIzdelkiApiUrl}priljubljeni`;
         return this.http.post<any>(url, JSON.stringify(object), {headers: this.headers})
-                .pipe(catchError(this.handleError));
+            .pipe(catchError(this.handleError));
     }
 
-    getUporabnik(){
-        this.uporabnik.id=1;
-        this.uporabnik.firstname="David";
-        this.uporabnik.lastname="Trafela";
+    getUporabnik() {
+        this.uporabnik.id = 1;
+        this.uporabnik.firstname = "David";
+        this.uporabnik.lastname = "Trafela";
     }
-    getNajboljPriljubljene(){
-        return this.http.get<any[]>(this.priljubljeniIzdelkiApiUrl+'priljubljeni/najbolj')
-                        .pipe(catchError(this.handleError));
+
+    getNajboljPriljubljene() {
+        return this.http.get<any[]>(this.priljubljeniIzdelkiApiUrl + 'priljubljeni/najbolj')
+            .pipe(catchError(this.handleError));
+    }
+
+    getKosaricoByUser() {
+        this.getUporabnik()
+        const url = `${this.kosaricaApiUrl}/kosarica/user/${this.uporabnik.id}`;
+        return this.http.get<any>(url, {headers: this.headers})
+            .pipe(catchError(this.handleError));
+    }
+
+    dodajIzdelekVKosarico(kosarica: Kosarica, izdelek: Izdelek) {
+        this.getUporabnik()
+        const url = `${this.kosaricaApiUrl}/kosarica/${kosarica.id}/dodajIzdelek`;
+        return this.http.post<any>(url, JSON.stringify(izdelek), {headers: this.headers})
+            .pipe(catchError(this.handleError));
+    }
+
+    zbrisiIzdelekIzKosarice(kosarica: Kosarica, izdelek: Izdelek) {
+        this.getUporabnik()
+        const url = `${this.kosaricaApiUrl}/kosarica/${kosarica.id}/izbrisiIzdelek/${izdelek.id}`;
+        return this.http.delete<any>(url, {headers: this.headers})
+            .pipe(catchError(this.handleError));
     }
 
     // delete(id: number): Observable<number> {

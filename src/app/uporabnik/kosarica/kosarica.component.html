@@ -1,1 +1,23 @@
-<p>kosarica works!</p>
+<div class="container p-4">
+    <div *ngFor="let izdelek of kosarica.izdelki">
+        <div class="row  mb-3 shadow-sm">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class ="col-12 col-lg-5 fs-5 fw-bold mt-2">
+                            {{izdelek.naziv}}
+                        </div>
+                        <div class ="col-12 col-lg-4  mt-2">
+                            {{izdelek.kategorija}}
+                        </div>
+                        <div class ="col-12 col-lg-3 mt-2 mt-lg-1 text-end">
+                            <button (click)="naPodrobnosti(izdelek)" class="btn btn-outline-secondary btn-sm has-icon btn-block">PODROBNOSTI</button>
+
+                            <i class="bi bi-trash-fill mx-3 trash" (click)="odstraniIzKosarice(izdelek)"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
