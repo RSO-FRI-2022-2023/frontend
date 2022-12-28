@@ -24,6 +24,14 @@
               <li class="nav-item">
                 <a class="nav-link" routerLink="/kosarica">KOŠARICA</a>
               </li>
+
+              <li class="nav-item dropdown">
+                <select class="form-select" aria-label="Default select example">
+                  <option *ngFor="let valuta of valute" value="{{valuta.shortName}}}">
+                    {{valuta.shortName}}
+                  </option>
+                </select>
+              </li>
             </ul>
           </div>
         </div>

@@ -18,6 +18,7 @@ export class Service {
     private izdelkiApiUrl = environment.izdelkiApiUrl;
     private priljubljeniIzdelkiApiUrl = environment.priljubljeniIzdelkiApiUrl;
     private kosaricaApiUrl = environment.kosaricaApiUrl;
+    private valuteApiUrl = environment.valuteApiUrl;
 
     constructor(private http: HttpClient) {
     }
@@ -85,6 +86,12 @@ export class Service {
         this.getUporabnik()
         const url = `${this.kosaricaApiUrl}/kosarica/${kosarica.id}/izbrisiIzdelek/${izdelek.id}`;
         return this.http.delete<any>(url, {headers: this.headers})
+            .pipe(catchError(this.handleError));
+    }
+
+    getValute() {
+        const url = `${this.valuteApiUrl}/valuta`;
+        return this.http.get<any>(url, {headers: this.headers})
             .pipe(catchError(this.handleError));
     }
 
