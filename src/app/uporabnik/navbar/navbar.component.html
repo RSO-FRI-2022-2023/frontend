@@ -27,7 +27,7 @@
 
               <li class="nav-item dropdown">
                 <select class="form-select" aria-label="Default select example">
-                  <option *ngFor="let valuta of valute" value="{{valuta.shortName}}}">
+                  <option *ngFor="let valuta of valute" value="{{valuta.shortName}}}" [selected]="valuta.shortName == 'EUR'" (change)="changeValute($event)">
                     {{valuta.shortName}}
                   </option>
                 </select>

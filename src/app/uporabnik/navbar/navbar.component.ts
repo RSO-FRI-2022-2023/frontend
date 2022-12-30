@@ -11,6 +11,7 @@ import {Valuta} from "../models/valuta";
 export class NavbarComponent implements OnInit {
 
     valute: Valuta[]
+    selectedValuta: Valuta = null
 
     constructor(private service: Service,
                 private route: ActivatedRoute) {
@@ -23,9 +24,18 @@ export class NavbarComponent implements OnInit {
     getValute() {
         this.service.getValute()
             .subscribe(valute => {
-                this.valute = valute;
+                this.valute = valute.result;
                 console.log(this.valute);
+
+                this.valute.forEach(valuta => {
+                   if(valuta.shortName == "EUR" && this.selectedValuta == null) {
+                       this.selectedValuta = valuta;
+                   }
+                });
             });
     }
 
+    changeValute(event) {
+        console.log(event.value)
+    }
 }
