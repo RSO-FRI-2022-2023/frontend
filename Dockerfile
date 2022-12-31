@@ -1,6 +1,6 @@
 FROM node:18.12-alpine as node
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY package.json ./
 RUN npm install
 COPY . .
 RUN npm run build --prod
