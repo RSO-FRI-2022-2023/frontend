@@ -1,5 +1,6 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable, Output} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {CookieService} from 'ngx-cookie-service';
 
 import {Uporabnik} from '../models/uporabnik';
 import {Observable} from 'rxjs';
@@ -20,7 +21,11 @@ export class Service {
     private kosaricaApiUrl = environment.kosaricaApiUrl;
     private valuteApiUrl = environment.valuteApiUrl;
 
-    constructor(private http: HttpClient) {
+    @Output() rate = new EventEmitter<number>();
+    @Output() valuta = new EventEmitter<string>();
+
+    constructor(private http: HttpClient, private cookieService: CookieService) {
+
     }
 
     getIzdelki(): Observable<Izdelek[]> {
@@ -93,6 +98,42 @@ export class Service {
         const url = `${this.valuteApiUrl}/valuta`;
         return this.http.get<any>(url, {headers: this.headers})
             .pipe(catchError(this.handleError));
+    }
+
+    getChangeRate(to) {
+        let body = {
+            "from": {
+                "shortName": "EUR",
+                "longName": "Euro"
+            },
+            "to": {
+                "shortName": to,
+                "longName": "Euro"
+            },
+            "amount": 1.0
+        }
+
+        const url = `${this.valuteApiUrl}/valuta`;
+        return this.http.post<any>(url, JSON.stringify(body), {headers: this.headers})
+            .pipe(catchError(this.handleError));
+    }
+
+    saveToCookies(name, value) {
+        this.cookieService.set(name, value);
+    }
+
+    getFromCookies(name) {
+        return this.cookieService.get(name);
+    }
+
+    saveValutaRate(valutaRate) {
+        this.saveToCookies("rate", valutaRate);
+        this.rate.emit(valutaRate);
+    }
+
+    saveValutaName(valuta) {
+        this.saveToCookies("valuta", valuta);
+        this.valuta.emit(valuta);
     }
 
     // delete(id: number): Observable<number> {

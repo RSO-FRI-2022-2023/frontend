@@ -22,20 +22,36 @@ export class NavbarComponent implements OnInit {
     }
 
     getValute() {
+        let savedValuta = this.service.getFromCookies("valuta")
+
+        if (savedValuta == null || savedValuta.length == 0) {
+            savedValuta = "EUR";
+        }
+
+        console.log(savedValuta);
+
         this.service.getValute()
             .subscribe(valute => {
                 this.valute = valute.result;
-                console.log(this.valute);
 
                 this.valute.forEach(valuta => {
-                   if(valuta.shortName == "EUR" && this.selectedValuta == null) {
-                       this.selectedValuta = valuta;
-                   }
+                    if (valuta.shortName == savedValuta && this.selectedValuta == null) {
+                        this.selectedValuta = valuta;
+                        this.service.saveValutaName(savedValuta);
+
+                        console.log(this.selectedValuta)
+                    }
                 });
             });
     }
 
     changeValute(event) {
-        console.log(event.value)
+        this.service.getChangeRate(event)
+            .subscribe(change => {
+                console.log(change);
+
+                this.service.saveValutaName(event);
+                this.service.saveValutaRate(change.result.rate);
+            });
     }
 }
