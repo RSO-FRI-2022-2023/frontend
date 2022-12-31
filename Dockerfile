@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package.json ./
 RUN npm install
 COPY . .
-RUN npm run build --prod
+RUN npm run build --prod --base-href /rso/ui/ --deploy-url /rso/ui/
 
 EXPOSE 4200
 
