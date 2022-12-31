@@ -57,4 +57,5 @@ jobs:
         with:
           file: ./Dockerfile
           push: true
+          platforms: linux/arm64,linux/amd64
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/rso-frontend:${{ steps.current-time.outputs.formattedTime }}, ${{ secrets.DOCKERHUB_USERNAME }}/rso-frontend:latest
