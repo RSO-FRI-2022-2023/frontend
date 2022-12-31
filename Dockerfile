@@ -1,4 +1,4 @@
-FROM node:18.12-alpine as node
+FROM node:18.12-alpine as build
 WORKDIR /app
 COPY package.json ./
 RUN npm install
@@ -13,4 +13,4 @@ FROM --platform=linux/amd64 nginx:alpine as stage-amd64
 ARG TARGETARCH
 # Select final stage based on TARGETARCH ARG
 FROM stage-${TARGETARCH} as final
-COPY --from=node ./app/dist/frontend /usr/share/nginx/html
+COPY --from=build ./app/dist/frontend /usr/share/nginx/html
