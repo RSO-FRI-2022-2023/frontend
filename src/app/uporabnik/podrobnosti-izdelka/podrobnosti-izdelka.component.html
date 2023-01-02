@@ -13,8 +13,12 @@
                             <div class ="col-12 col-lg-5 fs-5 fw-bold mt-2">
                             {{cena.trgovina.ime}}
                             </div>
-                            <div class ="col-12 col-lg-4  mt-2">
-                            {{convertCena(cena.cena)}} {{valuta}}
+                            <div class ="col-12 col-lg-4  mt-2"  *ngIf="cena.discount >0">
+                                <span style="text-decoration: line-through">{{convertCena(cena.cena)}}</span>
+                                <span class="m-1 fs-5" style="font-weight: bolder; color: red;">{{convertCena(cena.cena - cena.discount)}} {{valuta}}</span>
+                            </div>
+                            <div class ="col-12 col-lg-4  mt-2" *ngIf="cena.discount ==0">
+                                {{convertCena(cena.cena)}} {{valuta}}
                             </div>
                         </div>
                     </div>
