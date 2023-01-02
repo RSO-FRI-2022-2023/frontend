@@ -64,7 +64,7 @@ export class PodrobnostiIzdelkaComponent implements OnInit {
         this.service.valuta.subscribe(valuta => this.valuta = valuta);
     }
 
-    convertCena(cena) {
+    convertCena(cena:any) {
         return Math.round((cena * this.rate) * 1e2) / 1e2;
     }
 }
