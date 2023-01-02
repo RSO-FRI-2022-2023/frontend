@@ -13,4 +13,5 @@ FROM --platform=linux/amd64 nginx:alpine as stage-amd64
 ARG TARGETARCH
 # Select final stage based on TARGETARCH ARG
 FROM stage-${TARGETARCH} as final
+COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=build ./app/dist/frontend /usr/share/nginx/html
