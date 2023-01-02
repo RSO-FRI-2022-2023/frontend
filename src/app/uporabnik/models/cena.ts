@@ -1,5 +1,5 @@
-import { Izdelek } from "./izdelek";
-import { Trgovina } from "./trgovina";
+import {Izdelek} from "./izdelek";
+import {Trgovina} from "./trgovina";
 
 export class Cena {
     id: number;

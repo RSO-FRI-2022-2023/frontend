@@ -1,4 +1,7 @@
 <div class="container p-4">
+    <div>
+        Najnižja cena celotne kosarice: <b>{{convertCena(cene)}} {{valuta}}</b> <br>
+    </div>
     <div *ngFor="let izdelek of kosarica.izdelki">
         <div class="row  mb-3 shadow-sm">
             <div class="card">
